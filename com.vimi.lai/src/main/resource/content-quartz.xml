@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/batch"  
+    xmlns:beans="http://www.springframework.org/schema/beans" xmlns:bean="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans   
+    http://www.springframework.org/schema/beans/spring-beans.xsd  
+    http://www.springframework.org/schema/batch  
+    http://www.springframework.org/schema/batch/spring-batch-2.1.xsd">  
+    <bean:bean id="jobRepository"  
+        class="org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean">  
+        <bean:property name="transactionManager" ref="transactionManager" />  
+    </bean:bean>  
+    <bean:bean id="transactionManager"  
+        class="org.springframework.batch.support.transaction.ResourcelessTransactionManager">  
+    </bean:bean>  
+    <bean:bean id="jobLauncher"  
+        class="org.springframework.batch.core.launch.support.SimpleJobLauncher">  
+        <bean:property name="jobRepository" ref="jobRepository" />  
+    </bean:bean>  
+    <bean:bean class="org.springframework.batch.core.configuration.support.JobRegistryBeanPostProcessor">
+    	<bean:property name="jobRegistry" ref="jobRegistry"></bean:property>
+    </bean:bean>
+     
+
+  <bean:bean id="jobRegistry"
+	class="org.springframework.batch.core.configuration.support.MapJobRegistry" />
+    <job id="ioSampleJob">  
+        <step id="step1">  
+            <tasklet ref="begin"></tasklet>  
+        </step>  
+    </job>  
+    <bean:bean id="begin" class="com.vimi.lai.tasklet.MyFirstTasklet" scope="step">  
+    </bean:bean>  
+     <!-- run every 10 seconds -->
+  <bean:bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+	<bean:property name="triggers">
+	  <bean:bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<bean:property name="jobDetail" ref="jobDetail" />
+		<bean:property name="cronExpression" value="*/10 * * * * ?" />
+	  </bean:bean>
+	</bean:property>
+  </bean:bean>
+
+  <bean:bean id="jobDetail" class="org.springframework.scheduling.quartz.JobDetailBean">
+	<bean:property name="jobClass" value="com.vimi.lai.tasklet.JobLauncherDetails" />
+	<bean:property name="group" value="quartz-batch" />
+	<bean:property name="jobDataAsMap">
+	  <bean:map>
+		<bean:entry key="jobName" value="ioSampleJob" />
+		<bean:entry key="jobLocator" value-ref="jobRegistry" />
+		<bean:entry key="jobLauncher" value-ref="jobLauncher" />
+	  </bean:map>
+	</bean:property>
+  </bean:bean>
+    
+   
+    
+    
+</beans:beans>  
