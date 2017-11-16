@@ -24,11 +24,22 @@
 
   <bean:bean id="jobRegistry"
 	class="org.springframework.batch.core.configuration.support.MapJobRegistry" />
-    <job id="ioSampleJob">  
+    <job id="ioSampleJob" >  
         <step id="step1">  
             <tasklet ref="begin"></tasklet>  
         </step>  
     </job>  
+    <!--用于 同一个Job在batch启动后被多次调用的场合，startNextInstance方法将会非常有用，因为它将使用JobParametersIncrementer与Job绑定，创建一个新实例-->
+    <!-- <job id="ioSampleJob"  incrementer="sampleIncrementer">  
+        <step id="step1">  
+            <tasklet ref="begin"></tasklet>  
+        </step> 
+          <validator ref="jobParametersValidator" />    
+    </job>  
+    <bean:bean id="sampleIncrementer"        
+        class="org.springframework.batch.core.launch.support.RunIdIncrementer"/> -->
+    <!-- End -->
+    
     <bean:bean id="begin" class="com.vimi.lai.tasklet.MyFirstTasklet" scope="step">  
     </bean:bean>  
      <!-- run every 10 seconds -->
