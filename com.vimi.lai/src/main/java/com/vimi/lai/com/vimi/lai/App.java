@@ -18,8 +18,8 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
  */
 public class App 
 {
-    public static void main( String[] args )
-    {
+    public static void main( String[] args ) {
+    
     	ApplicationContext context;  
         JobParametersBuilder jobPara = new JobParametersBuilder();  //设置文件路径参数  
         context = new FileSystemXmlApplicationContext(new String[]{"classpath:content.xml"});  
