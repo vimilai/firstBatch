@@ -71,5 +71,18 @@
 			    <artifactId>javax.mail</artifactId>
 			    <version>1.4.7</version>
 			</dependency>
+		<!-- Spring jdbc, for database -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+			<!--DBCP  -->
+		<dependency>
+    		<groupId>org.apache.commons</groupId>
+    		<artifactId>commons-dbcp2</artifactId>
+    		<version>2.1.1</version>
+		</dependency>
+		
   </dependencies>
 </project>
